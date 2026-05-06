@@ -1,0 +1,20 @@
+[
+    {
+        "id": "user_69fb019504348",
+        "name": "Tushar Umesh Sonawane",
+        "email": "tusharsonawane6832@gmail.com",
+        "password": "ggh",
+        "address": "Solapur",
+        "bakery_cash": 2000,
+        "saved_designs": []
+    },
+    {
+        "id": "user_69fb01f2950aa",
+        "name": "Tushar Umesh Sonawane",
+        "email": "tushar6832@gmail.com",
+        "password": "tushar",
+        "address": "Solapur",
+        "bakery_cash": 2000,
+        "saved_designs": []
+    }
+]
