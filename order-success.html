@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success - Sweet Crumbs</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        .success-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .success-card {
+            background: white;
+            padding: 50px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+        }
+        .icon-wrapper {
+            width: 100px;
+            height: 100px;
+            background: #e8f5e9;
+            color: #4caf50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 50px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo"><span>🍰</span> Sweet Crumbs</a>
+        <ul class="nav-links">
+            <li><a href="profile.php">My Profile</a></li>
+            <li><a href="feedback.php">Leave Feedback</a></li>
+        </ul>
+    </nav>
+
+    <div class="success-container">
+        <div class="success-card">
+            <div class="icon-wrapper">
+                <ion-icon name="checkmark-circle"></ion-icon>
+            </div>
+            <h2 style="font-size: 32px; margin-bottom: 10px;">Order Placed!</h2>
+            <p style="color: var(--text-light); font-size: 18px; margin-bottom: 30px;">
+                Thank you! Your customized treats are being prepared with love.
+            </p>
+            
+            <div style="background: var(--secondary-color); padding: 15px; border-radius: 8px; margin-bottom: 30px;">
+                <p><strong>Order ID:</strong> <span id="order-id-display">Loading...</span></p>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <a href="index.html" class="btn btn-primary">Back Home</a>
+                <a href="profile.php" class="btn btn-outline">Track Order</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get order ID from URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('id');
+        if(orderId) {
+            document.getElementById('order-id-display').innerText = orderId;
+        }
+    </script>
+</body>
+</html>

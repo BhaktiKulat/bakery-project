@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Crumbs - Custom Desserts Delivered</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Ionicons for modern icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <span>🍰</span> Sweet Crumbs
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="customize.html">Customize <span style="background:var(--primary-color);color:white;padding:2px 6px;border-radius:10px;font-size:10px;margin-left:4px;">NEW</span></a></li>
+            <li><a href="feedback.php">Reviews</a></li>
+            <li><a href="cart.html"><ion-icon name="cart-outline" class="nav-icon"></ion-icon> Cart (<span id="cart-count">0</span>)</a></li>
+            <li><a href="login.php" class="btn btn-primary" style="color:white;">Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="blob"></div>
+        <div class="hero-content">
+            <h1>Bake Your <span>Imagination</span> Into Reality</h1>
+            <p>Order fresh, premium desserts or build your own custom masterpiece in our interactive 3D studio. Delivered fast to your doorstep.</p>
+            <div style="display:flex;gap:15px;">
+                <a href="customize.html" class="btn btn-primary">Start Customizing</a>
+                <a href="#menu" class="btn btn-outline">Explore Menu</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1089&auto=format&fit=crop" style="border-radius:50%; width: 400px; height: 400px; object-fit: cover; border: 15px solid white;" alt="Beautiful Cake">
+        </div>
+    </section>
+
+    <!-- CUSTOMIZE BANNER -->
+    <section class="customize-banner">
+        <div class="cb-content">
+            <h2>Be the Chef! 🧑‍🍳</h2>
+            <p>Design your own cake, pastry, or donut layer by layer. Choose flavors, toppings, shapes, and see it build live before you order!</p>
+            <a href="customize.html" class="btn btn-primary" style="background:white; color:var(--text-dark);">Try Interactive Builder</a>
+        </div>
+        <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=1064&auto=format&fit=crop" class="cb-image" style="border-radius: 50%;" alt="Donuts">
+    </section>
+
+    <!-- MENU SECTION -->
+    <section class="section" id="menu">
+        <div class="section-header">
+            <div>
+                <span style="color:var(--primary-color); font-weight:700; text-transform:uppercase; font-size:14px;">Our Menu</span>
+                <h2 class="section-title">Popular Delights</h2>
+            </div>
+            <div class="categories-filter" style="display:flex; gap:10px;">
+                <button class="btn btn-outline" style="background:var(--primary-color); color:white;">All</button>
+                <button class="btn btn-outline">Cakes</button>
+                <button class="btn btn-outline">Donuts</button>
+                <button class="btn btn-outline">Pastries</button>
+            </div>
+        </div>
+
+        <div class="product-grid" id="product-container">
+            <!-- Products will be loaded here via JS -->
+        </div>
+    </section>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Fetch products from JSON and display
+        fetch('data/products.json')
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('product-container');
+                data.forEach(product => {
+                    const card = `
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <div class="product-badge"><ion-icon name="star" style="color:#ffc107;"></ion-icon> ${product.rating}</div>
+                                <img src="${product.image}" class="product-img" alt="${product.name}">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-category">${product.category}</div>
+                                <h3 class="product-title">${product.name}</h3>
+                                <div class="product-price">₹${product.price}</div>
+                                <div class="product-actions">
+                                    <select>
+                                        <option value="1">1 Qty</option>
+                                        <option value="2">2 Qty</option>
+                                    </select>
+                                    <button class="btn-add" onclick="alert('Added to cart!')"><ion-icon name="add"></ion-icon></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            });
+    </script>
+</body>
+</html>

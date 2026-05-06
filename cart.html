@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Sweet Crumbs</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        .cart-container { max-width: 1200px; margin: 40px auto; padding: 0 5%; display: flex; gap: 30px; }
+        .cart-items-section { flex: 2; background: white; padding: 30px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+        .cart-summary-section { flex: 1; background: white; padding: 30px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); height: fit-content; position: sticky; top: 100px; }
+        
+        .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid #eee; }
+        .cart-item:last-child { border-bottom: none; }
+        .ci-details { display: flex; align-items: center; gap: 20px; }
+        .ci-img { width: 80px; height: 80px; border-radius: var(--radius-sm); object-fit: cover; }
+        .ci-info h4 { margin-bottom: 5px; }
+        .ci-info p { font-size: 13px; color: var(--text-light); }
+        .ci-actions { display: flex; align-items: center; gap: 15px; }
+        .qty-btn { padding: 5px 10px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 4px; }
+        .remove-btn { color: red; background: none; border: none; cursor: pointer; font-size: 20px; }
+        
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; color: var(--text-dark); }
+        .summary-total { font-size: 24px; font-weight: bold; border-top: 1px solid #ddd; padding-top: 15px; margin-top: 15px; }
+        .empty-state { text-align: center; padding: 50px 0; }
+        .empty-state ion-icon { font-size: 64px; color: #ccc; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="logo"><span>🍰</span> Sweet Crumbs</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="customize.html">Customize</a></li>
+        </ul>
+    </nav>
+
+    <div class="cart-container">
+        <div class="cart-items-section" id="cart-list">
+            <!-- Items rendered here by js -->
+        </div>
+
+        <div class="cart-summary-section">
+            <h3>Order Summary</h3>
+            <hr style="margin:15px 0; border:0; border-top:1px solid #eee;">
+            <div class="summary-row"><span>Subtotal</span> <span id="subtotal">₹0</span></div>
+            <div class="summary-row"><span>Delivery Fee</span> <span>₹50</span></div>
+            <div class="summary-total summary-row"><span>Total</span> <span id="grand-total">₹0</span></div>
+            <a href="billing.php" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 20px;" id="checkout-btn">Proceed to Checkout</a>
+        </div>
+    </div>
+
+    <script src="js/cart.js"></script>
+</body>
+</html>

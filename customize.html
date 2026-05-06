@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customize Your Dessert - Sweet Crumbs</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        .wizard-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            min-height: 600px;
+        }
+
+        .wizard-sidebar {
+            flex: 1;
+            background: var(--bg-light);
+            padding: 40px;
+            border-right: 1px solid #eee;
+        }
+
+        .wizard-main {
+            flex: 2;
+            padding: 40px;
+            position: relative;
+        }
+
+        .step-indicator {
+            margin-bottom: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            text-transform: uppercase;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Option Cards */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-card {
+            border: 2px solid #eee;
+            border-radius: var(--radius-sm);
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-card:hover { border-color: var(--primary-color); background: var(--secondary-color); }
+        .option-card.selected { border-color: var(--primary-color); background: var(--primary-color); color: white; }
+
+        /* Visual Builder */
+        .builder-area {
+            height: 400px;
+            background: #f8f9fa;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            border: 2px dashed #ddd;
+        }
+
+        /* Pure CSS Cake Representation */
+        .css-cake {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .cake-base {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: #ffe0b2; /* Default vanilla */
+            border-radius: 10px;
+            box-shadow: inset 0 -20px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+
+        .cake-shape-square { border-radius: 5px; }
+        .cake-shape-heart { /* Simplified heart representation */ border-radius: 50% 50% 10px 10px; }
+
+        .cake-frosting {
+            position: absolute;
+            top: 20px;
+            width: 110%;
+            left: -5%;
+            height: 40px;
+            background: transparent;
+            border-radius: 20px;
+            transition: background 0.3s;
+            z-index: 2;
+        }
+        .cake-frosting::after {
+            content:''; position:absolute; top:20px; left:10px; width:20px; height:30px; background:inherit; border-radius:20px;
+            box-shadow: 40px 10px 0 0 inherit, 80px 0px 0 0 inherit, 120px 15px 0 0 inherit, 160px 5px 0 0 inherit;
+        }
+
+        .cake-cherry {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border-radius: 50%;
+            z-index: 3;
+            transition: background 0.3s;
+        }
+
+        .cake-sprinkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top:0; left:0;
+            z-index: 4;
+            opacity: 0;
+            background-image: radial-gradient(circle, #ffeb3b 2px, transparent 2px), radial-gradient(circle, #ff9800 2px, transparent 2px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            transition: opacity 0.3s;
+        }
+
+        /* Nav Buttons */
+        .wizard-nav { display: flex; justify-content: space-between; margin-top: 30px; }
+        
+        .price-tag {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="index.html" class="logo"><span>🍰</span> Sweet Crumbs</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cart.html"><ion-icon name="cart-outline" class="nav-icon"></ion-icon> Cart (<span id="cart-count">0</span>)</a></li>
+        </ul>
+    </nav>
+
+    <div class="wizard-container">
+        
+        <!-- SIDEBAR: Current Build Summary -->
+        <div class="wizard-sidebar">
+            <h3>Your Creation</h3>
+            <hr style="margin:15px 0; border:0; border-top:1px solid #ddd;">
+            <ul id="build-summary" style="list-style:none; line-height:2; color:var(--text-light);">
+                <li>Type: <span id="sum-type">None</span></li>
+                <li>Shape: <span id="sum-shape">None</span></li>
+                <li>Quantity: <span id="sum-qty">1</span></li>
+                <li>Flavor: <span id="sum-flavor">None</span></li>
+                <li>Frosting: <span id="sum-frosting">None</span></li>
+                <li>Topping: <span id="sum-topping">None</span></li>
+            </ul>
+            <div class="price-tag">Total: ₹<span id="total-price">0</span></div>
+        </div>
+
+        <!-- MAIN WIZARD -->
+        <div class="wizard-main">
+            
+            <!-- STEP 1: Dessert Type -->
+            <div class="step active" id="step-1">
+                <div class="step-indicator">Step 1 of 4</div>
+                <h2>What are we making today?</h2>
+                <div class="options-grid">
+                    <div class="option-card type-option" data-type="Cake" data-base-price="400">
+                        <ion-icon name="color-palette-outline" style="font-size:32px;"></ion-icon><br>Cake
+                    </div>
+                    <div class="option-card type-option" data-type="Pancakes" data-base-price="150">
+                        <ion-icon name="layers-outline" style="font-size:32px;"></ion-icon><br>Pancakes
+                    </div>
+                    <div class="option-card type-option" data-type="Pastry" data-base-price="80">
+                        <ion-icon name="cube-outline" style="font-size:32px;"></ion-icon><br>Pastry
+                    </div>
+                    <div class="option-card type-option" data-type="Ice Cream" data-base-price="100">
+                        <ion-icon name="snow-outline" style="font-size:32px;"></ion-icon><br>Ice Cream
+                    </div>
+                </div>
+                <div class="wizard-nav">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextStep(2)">Next Step</button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Shape & Quantity -->
+            <div class="step" id="step-2">
+                <div class="step-indicator">Step 2 of 4</div>
+                <h2>Shape & Size</h2>
+                <h4 style="margin-top:20px;">Shape</h4>
+                <div class="options-grid">
+                    <div class="option-card shape-option selected" data-shape="Round">Round</div>
+                    <div class="option-card shape-option" data-shape="Square">Square</div>
+                    <div class="option-card shape-option" data-shape="Heart">Heart</div>
+                </div>
+                <h4 style="margin-top:20px;">Quantity</h4>
+                <select id="qty-select" style="width:100%; padding:12px; margin-top:10px; border-radius:8px; border:1px solid #ddd;">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <div class="wizard-nav">
+                    <button class="btn btn-outline" onclick="nextStep(1)">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep(3)">Next Step</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Visual Builder -->
+            <div class="step" id="step-3">
+                <div class="step-indicator">Step 3 of 4</div>
+                <h2>Design It!</h2>
+                
+                <!-- VISUAL PREVIEW -->
+                <div class="builder-area">
+                    <div class="css-cake" id="visual-cake">
+                        <div class="cake-cherry" id="v-cherry"></div>
+                        <div class="cake-frosting" id="v-frosting"></div>
+                        <div class="cake-base" id="v-base"></div>
+                        <div class="cake-sprinkles" id="v-sprinkles"></div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px;">
+                    <button class="btn btn-outline btn-sm builder-tab active" data-target="b-flavor">Flavor Base</button>
+                    <button class="btn btn-outline btn-sm builder-tab" data-target="b-frosting">Frosting</button>
+                    <button class="btn btn-outline btn-sm builder-tab" data-target="b-toppings">Toppings</button>
+                </div>
+
+                <!-- Flavor Options -->
+                <div id="b-flavor" class="builder-panel">
+                    <div class="options-grid">
+                        <div class="option-card flavor-option" data-flavor="Vanilla" data-color="#ffe0b2">Vanilla</div>
+                        <div class="option-card flavor-option" data-flavor="Chocolate" data-color="#5d4037">Chocolate</div>
+                        <div class="option-card flavor-option" data-flavor="Red Velvet" data-color="#c62828">Red Velvet</div>
+                    </div>
+                </div>
+
+                <!-- Frosting Options -->
+                <div id="b-frosting" class="builder-panel" style="display:none;">
+                    <div class="options-grid">
+                        <div class="option-card frost-option" data-frost="None" data-color="transparent">None</div>
+                        <div class="option-card frost-option" data-frost="White Cream" data-color="#ffffff" style="border:1px solid #ccc;">White Cream</div>
+                        <div class="option-card frost-option" data-frost="Pink Strawberry" data-color="#f8bbd0">Strawberry</div>
+                        <div class="option-card frost-option" data-frost="Dark Choc" data-color="#3e2723">Dark Choc</div>
+                    </div>
+                </div>
+
+                <!-- Toppings Options -->
+                <div id="b-toppings" class="builder-panel" style="display:none;">
+                    <div class="options-grid">
+                        <div class="option-card top-option" data-top="None">None</div>
+                        <div class="option-card top-option" data-top="Sprinkles" data-price="30">Sprinkles (+₹30)</div>
+                        <div class="option-card top-option" data-top="Cherry" data-price="20">Cherry Top (+₹20)</div>
+                    </div>
+                </div>
+
+                <div class="wizard-nav">
+                    <button class="btn btn-outline" onclick="nextStep(2)">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep(4)">Review Order</button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Review -->
+            <div class="step" id="step-4">
+                <div class="step-indicator">Step 4 of 4</div>
+                <h2>Review & Add to Cart</h2>
+                <div style="background:var(--secondary-color); padding:20px; border-radius:var(--radius-sm); margin-top:20px;">
+                    <p><strong>Special Instructions:</strong></p>
+                    <textarea id="special-instructions" rows="3" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ddd; margin-top:10px;" placeholder="E.g., Write 'Happy Birthday' on top..."></textarea>
+                </div>
+                
+                <div class="wizard-nav">
+                    <button class="btn btn-outline" onclick="nextStep(3)">Edit Design</button>
+                    <button class="btn btn-primary" onclick="addToCart()">Add to Cart 🛒</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/customize.js"></script>
+</body>
+</html>
